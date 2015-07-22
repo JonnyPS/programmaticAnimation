@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+	<head>
+		<style>
+		 #container {
+		 	position:absolute;
+		 	width:600px;
+		 	height: 250px;
+		 	top: 0;
+		 	left: 0;
+		 	border: black solid 1px;
+		 }
+		</style>
+		<script src="TweenMax.min.js"></script>
+		<!--<script src="com/minified/TweenMax.min.js"></script>-->
+	</head>
+	<body onload="addElement()">
+		<div id="container"></div>
+		<script>
+			var divCount = 30;
+			var loopCount = 0;
+			var container = document.getElementById("container");
+			var containerWidth = container.width;
+
+			var stageHeight = container.clientHeight;
+			var bars = [];
+			var previousRandomNums = [];
+
+			function addElement() { 
+				for(i=1;i<=divCount;i++){
+					var newDiv = document.createElement("div"); 
+					// add the newly created element into container div
+					container.appendChild(newDiv); 
+
+					// assign an id to the newDivs
+					newDiv.id = "bar" + i;
+					console.log("newDiv = " + newDiv.getAttribute("id"));
+
+					// get attribute and push into an array
+					var newDivAtt = newDiv.getAttribute("id");
+					bars.push(newDivAtt);
+
+					console.log("container children Num = " +container.children.length);	
+				
+					// Set styles
+					var bgColor = ['red', 'green', 'blue', 'yellow', 'grey', 'black', 'purple'];
+					setColor = bgColor[Math.floor(Math.random() * bgColor.length)];
+					
+					var barWidth = [10, 20];
+					setWidth = barWidth[Math.floor(Math.random() * barWidth.length)];					
+
+					setLeftPos = Math.floor(Math.random() * 600);
+					console.log("setLeftPos " + setLeftPos);
+					// Assign styles
+
+					//document.getElementById('bar'+[i]).innerHTML = setColor;
+					//document.getElementById('bar'+[i]).innerHTML = "Hello";
+					document.getElementById('bar'+[i]).style.position = "absolute";
+					document.getElementById('bar'+[i]).style.display = "block";
+					document.getElementById('bar'+[i]).style.backgroundColor = setColor;
+					document.getElementById('bar'+[i]).style.width = setWidth + "px";
+					document.getElementById('bar'+[i]).style.top = -(stageHeight+2) + "px";
+					document.getElementById('bar'+[i]).style.left = setLeftPos + "px";
+					document.getElementById('bar'+[i]).style.height = stageHeight +"px";
+					document.getElementById('bar'+[i]).style.border = "black 1px solid";
+				}
+				init();
+			}
+			
+			function init() {
+				console.log("barslength is " + bars.length);
+				//var startingPos = -container.clientHeight;
+				var randomNum = Math.floor(Math.random() * bars.length);
+				console.log("randomNum ==== " + randomNum);
+				animateBar();
+
+				function animateBar() {
+					var chosenBar = document.getElementById(bars[randomNum]);
+					TweenMax.to(chosenBar, .3, {y:250, ease: Circ.easeInOut});
+					TweenMax.to(chosenBar, 0, {delay:.1, onComplete:spliceArray});
+					//spliceArray();	
+				}
+
+				function spliceArray() {
+					bars.splice(randomNum, 1);
+					console.log("barsSpliced = " + bars);
+					chosenBar = "";
+					randomNum = "";
+					checkLoopCount();
+				}
+
+				function checkLoopCount() {
+					if (loopCount < (divCount-1)){
+						loopCount++;
+						init();
+					}
+				}
+			}
+		</script>
+	</body>
+</html>
